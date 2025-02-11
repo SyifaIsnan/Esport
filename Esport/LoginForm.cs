@@ -29,19 +29,28 @@ namespace Esport
                     }
                     else
                     {
-                        SqlCommand cmd = new SqlCommand("select * from [User] where username = @username and password = @password", conn);
+                        SqlCommand cmd = new SqlCommand("select id from [User] where username = '"+textBox1.Text+"' and password = '"+textBox2.Text+"' ", conn);
                         cmd.CommandType = CommandType.Text;
                         conn.Open();
                         cmd.Parameters.AddWithValue("@username", textBox1.Text);
                         cmd.Parameters.AddWithValue("@password", textBox2.Text);
-                        SqlDataReader dr = cmd.ExecuteReader();
-                        dr.Read();
-                        if (dr.HasRows)
+                        DataTable dt = new DataTable();
+                        int userid = Convert.ToInt32(cmd.ExecuteScalar());
+                        
+                        //dr.Read();
+                        //dt.Load(dr);
+
+                        //MessageBox.Show(cmd.CommandText);
+                        //MessageBox.Show(dt.Rows[0][0].ToString());
+                        if (userid != 0)
                         {
                             this.Hide();
+                            Variabel.userid = Convert.ToInt32(userid);
                             MainForm mf = new MainForm();
+
                             mf.ShowDialog();
                         }
+
                     }
 
                 } catch (Exception ex)

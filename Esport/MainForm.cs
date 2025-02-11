@@ -39,8 +39,10 @@ namespace Esport
                 dataGridView1.DataSource = dt;
                 dataGridView1.Columns["id"].Visible = false;
                 b.AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
+                b.DefaultCellStyle.BackColor = ColorTranslator.FromHtml("#7A2EA8");
                 dataGridView1.Columns.Add(b);
                 conn.Close();
+
 
 
             }

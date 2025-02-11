@@ -20,34 +20,35 @@ namespace Esport
             InitializeComponent();  // ----> Harus paling awal/pertama, karena harus inisialisasi komponen
 
             this.scheduleid = scheduleid;
-            sisatiket();
+            
             tampildata();
             nicknamehometeam();
             nicknameawayteam();
             dataGridView1.setup();
             dataGridView2.setup();
+            sisatiket();
         }
 
         private void sisatiket()
         {
             using (var conn = Properti.conn())
             {
-                //SqlCommand cmd = new SqlCommand("select 60 - sum(total_ticket) from [schedule_detail] where schedule_id = @schedule_id;", conn);
-                //cmd.CommandType = CommandType.Text;
-                //conn.Open();
-                //cmd.Parameters.AddWithValue("@schedule_id", scheduleid);
-                //DataTable dt = new DataTable();
-                //SqlDataReader dr = cmd.ExecuteReader(); 
-                //dt.Load(dr);
-                //string sisatiket = dt.Rows[0][0].ToString();
-                //label6.Text = sisatiket + "Tickets";
-                //conn.Close();
+                SqlCommand cmd = new SqlCommand("select 60 - coalesce(sum(total_ticket),0) from [schedule_detail] where schedule_id = @schedule_id;", conn);
+                cmd.CommandType = CommandType.Text;
+                conn.Open();
+                cmd.Parameters.AddWithValue("@schedule_id", scheduleid);
+                DataTable dt = new DataTable();
+                SqlDataReader dr = cmd.ExecuteReader();
+                dt.Load(dr);
+                string sisatiket = dt.Rows[0][0].ToString();
+                label6.Text = sisatiket + " Tickets";
+                conn.Close();
 
-                int totaltiket = 60;
-                int booking = Convert.ToInt32(numericUpDown1.Value.ToString());
-                int totalBooking = totaltiket - booking;
+                //int totaltiket = 60;
+                //int booking = Convert.ToInt32(numericUpDown1.Value.ToString());
+                //int totalBooking = totaltiket - booking;
 
-                label6.Text = totalBooking.ToString() + " Tikects";
+                //label6.Text = totalBooking.ToString() + " Tikects";
 
             }
         }
@@ -127,7 +128,7 @@ namespace Esport
 
         private void BookForm_Load(object sender, EventArgs e)
         {
-
+            sisatiket();
         }
 
         private void dataGridView1_CellContentClick(object sender, DataGridViewCellEventArgs e)
@@ -152,7 +153,7 @@ namespace Esport
                     cmd.CommandType = CommandType.Text;
                     conn.Open();
                     cmd.Parameters.AddWithValue("@schedule_id", scheduleid);
-                    cmd.Parameters.AddWithValue("@user_id", 1);
+                    cmd.Parameters.AddWithValue("@user_id", Variabel.userid);
                     cmd.Parameters.AddWithValue("@total_ticket", numericUpDown1.Value);
                     cmd.Parameters.AddWithValue("@created_at", DateTime.Now);
                     cmd.ExecuteNonQuery();

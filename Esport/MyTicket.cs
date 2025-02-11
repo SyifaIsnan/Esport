@@ -29,7 +29,7 @@ namespace Esport
                 SqlCommand cmd = new SqlCommand("select concat(homeTeam.team_name , ' vs ' , awayTeam.team_name) as Match, schedule.time as Time, schedule_detail.total_ticket as TotalTicket from [schedule_detail] \r\ninner join [schedule] on schedule_detail.schedule_id = schedule.id \r\ninner join [team] as homeTeam on schedule.home_team_id = homeTeam.id  \r\ninner join [team] as awayTeam on schedule.away_team_id = awayTeam.id  \r\n\r\nwhere user_id=@user_id;", conn);
                 cmd.CommandType = CommandType.Text;
                 conn.Open();
-                cmd.Parameters.AddWithValue("@user_id", 1);
+                cmd.Parameters.AddWithValue("@user_id", Variabel.userid);
                 DataTable dt = new DataTable();
                 SqlDataReader dr = cmd.ExecuteReader();
                 dt.Load(dr);
